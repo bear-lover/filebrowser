@@ -108,7 +108,9 @@ func (d *data) CheckWritePerm(path string) bool {
 
 func handle(fn handleFunc, prefix string, store *storage.Storage, server *settings.Server) http.Handler {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		for k, v := range globalHeaders {
+			w.Header().Set(k, v)
+		}
 
 		settings, err := store.Settings.Get()
 		if err != nil {
